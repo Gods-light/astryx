@@ -1,0 +1,57 @@
+{
+  "shape": "storybook",
+  "storybookConfigDir": "apps/storybook/.storybook",
+  "pkg": "@astryxdesign/core",
+  "globalName": "Astryx",
+  "storybookStatic": ".design-sync/sb-reference",
+  "extraEntries": [
+    "../../.design-sync/extra-entries/preview-theme.mjs",
+    "./dist/Toast/index.js"
+  ],
+  "docsDir": "../../.design-sync/docs",
+  "readmeHeader": ".design-sync/conventions.md",
+  "cssEntry": "./dist/astryx-with-reset.css",
+  "overrides": {
+    "AppShell": {"cardMode": "column"},
+    "Avatar": {"cardMode": "column"},
+    "Button": {"cardMode": "column"},
+    "Carousel": {"cardMode": "single", "primaryStory": "Default"},
+    "ChatComposer": {"cardMode": "column"},
+    "ChatComposerInput": {"cardMode": "column"},
+    "ChatLayout": {"cardMode": "column"},
+    "ChatTokenizedText": {"cardMode": "column"},
+    "ChatToolCalls": {"cardMode": "column"},
+    "CheckboxInput": {"cardMode": "column"},
+    "DateTimeInput": {"cardMode": "column"},
+    "Field": {"cardMode": "column"},
+    "Icon": {"cardMode": "column"},
+    "Layout": {"cardMode": "column"},
+    "Lightbox": {"cardMode": "column"},
+    "MediaTheme": {"skip": ["core-mediatheme--regional-detection"]},
+    "OverflowList": {"cardMode": "column"},
+    "Overlay": {"cardMode": "column"},
+    "Pagination": {"cardMode": "column"},
+    "PowerSearch": {"cardMode": "column"},
+    "Stack": {"cardMode": "column"},
+    "Switch": {"cardMode": "column"},
+    "TabList": {"cardMode": "single", "primaryStory": "Default"},
+    "Table": {"cardMode": "column"},
+    "Text": {"cardMode": "column"},
+    "TextArea": {"cardMode": "column"},
+    "Theme": {"cardMode": "column"},
+    "Tooltip": {"skip": ["charts-chrome-tooltip--default"]}
+  },
+  "provider": {
+    "component": "Theme",
+    "props": {
+      "theme": {"$ref": "previewNeutralTheme"},
+      "mode": "light"
+    },
+    "inner": {
+      "component": "LayerProvider"
+    }
+  },
+  "libOverrides": {
+    "story-imports.mjs": "Astryx story files call stylex.create() at module scope; the esbuild-target @stylexjs/unplugin plugin is added to the story-compile plugin list so those calls compile instead of throwing at preview runtime."
+  }
+}

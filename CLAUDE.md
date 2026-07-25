@@ -74,6 +74,18 @@ Documentation lives in two places:
 - **Testing**: Vitest (colocated tests)
 - **Components**: `packages/core/`
 - **Storybook**: `apps/storybook/`
+- **Stories**: `apps/storybook/stories/*.stories.tsx` (NOT colocated with components)
+
+Commit gates|husky pre-commit runs `pnpm exec lint-staged` then `pnpm check:repo`.
+|lint-staged: `eslint --cache --fix` on *.{ts,tsx}; `prettier --write` on *.{ts,tsx,md} — it REWRITES staged markdown, so generated .md files come back reformatted.
+|Every .ts/.tsx needs `// Copyright (c) Meta Platforms, Inc. and affiliates.` — `@astryx/copyright-header` = error (auto-fixable). `@typescript-eslint/no-explicit-any` = error and NOT auto-fixable — it is the usual thing that actually blocks a commit. `curly` = warn only.
+|`pnpm check:repo` = check:sync + check:package-boundaries + check:changesets + check:demo-media + check:executable-bits.
+
+StyleX build divergence|Storybook and dist compile StyleX DIFFERENTLY — the two CSS outputs are NOT interchangeable.
+|storybook: atomics prefixed `astryx*` (`astryx1n2onr6`), emitted into `@layer priority1..priority10`.
+|dist: atomics plain `x*` (`x1n2onr6`), emitted into `@layer astryx-base`.
+|MEASURED CONSEQUENCE: a theme's `components:` overrides (e.g. neutralTheme `button['variant:destructive']` → `--color-error-muted`) APPLY in the published package but NOT in storybook, which renders the base style (`--color-error`). Same story, two different colours. Storybook is not a faithful preview of what consumers render — verify colour/treatment against `dist`, not storybook. (Exact cascade cause not pinned down; the divergence itself is reproducible on both sides.)
+|CSS: consumers import BOTH `@astryxdesign/core/reset.css` AND `@astryxdesign/core/astryx.css` (= `dist/astryx.css`, a gitignored build output). reset.css supplies `:where(*,*::before,*::after){border-width:0}`.
 
 ## JSDoc Conventions
 
