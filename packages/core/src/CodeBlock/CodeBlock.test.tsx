@@ -3,7 +3,7 @@
 /**
  * @file CodeBlock.test.tsx
  * @input Uses vitest, @testing-library/react, CodeBlock component
- * @output Unit tests for CodeBlock (copy button, collapse, scroll region a11y, syntaxTheme)
+ * @output Unit tests for CodeBlock (copy, collapse, scrolling, sticky line numbers, syntaxTheme)
  * @position Testing; validates CodeBlock implementation
  *
  * SYNC: When CodeBlock.tsx changes, update tests to match new behavior
@@ -54,6 +54,61 @@ describe('CodeBlock', () => {
     const region = screen.getByRole('group');
     expect(region).toHaveAttribute('tabindex', '0');
     expect(region).toHaveAttribute('aria-label', 'Code');
+  });
+
+  it('applies sticky gutter styling when sticky line numbers are enabled', () => {
+    const {container} = render(
+      <CodeBlock
+        code="const value = 'a long line';"
+        hasLineNumbers
+        hasStickyLineNumbers
+      />,
+    );
+
+    expect(
+      container.querySelector('[data-sticky-line-number-gutter]'),
+    ).toBeInTheDocument();
+    expect(
+      container.querySelector('[data-sticky-line-number-divider]'),
+    ).toBeInTheDocument();
+  });
+
+  it('does not enable a sticky gutter without line numbers', () => {
+    const {container} = render(
+      <CodeBlock code="const value = 1;" hasStickyLineNumbers />,
+    );
+
+    expect(
+      container.querySelector('[data-sticky-line-number-gutter]'),
+    ).not.toBeInTheDocument();
+    expect(
+      container.querySelector('[data-sticky-line-number-divider]'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('extends highlighted lines across the sticky gutter', () => {
+    const {container, rerender} = render(
+      <CodeBlock
+        code={'const first = 1;\nconst second = 2;'}
+        hasLineNumbers
+        highlightLines={[2]}
+      />,
+    );
+    const regularHighlightClassName =
+      container.querySelector('[data-line="2"]')?.className;
+
+    rerender(
+      <CodeBlock
+        code={'const first = 1;\nconst second = 2;'}
+        hasLineNumbers
+        hasStickyLineNumbers
+        highlightLines={[2]}
+      />,
+    );
+
+    expect(container.querySelector('[data-line="2"]')?.className).not.toBe(
+      regularHighlightClassName,
+    );
   });
 
   it('copies code when the copy button is clicked', () => {
