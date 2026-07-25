@@ -216,25 +216,23 @@ const styles = stylex.create({
     // Fixed scrim treatment instead of the secondary variant's theme tokens.
     // The button always sits over an image, so its color mode is irrelevant:
     // every state is pinned to the same values in both light and dark mode.
-    // - backing: translucent black (`#00000040` = rgba(0,0,0,.25))
     // - X icon: `--color-on-dark` (white, same in both modes; Icon inherits it)
-    // - hover/active: fixed white tints layered over the scrim, replacing the
-    //   secondary variant's mode-dependent `--color-overlay-*` gradients. These
-    //   match the dark-side (on-dark) values of those tokens — `#FFFFFF0C`
-    //   (~5%) on hover, `#FFFFFF19` (~10%) on press — so the feel matches the
-    //   rest of the system, just pinned across both modes.
-    // eslint-disable-next-line @astryx/no-hardcoded-styles -- intentional theme- and mode-independent scrim over media; these values are fixed by design, not themeable surfaces
-    backgroundColor: '#00000040',
+    // - backing: a translucent-black scrim that darkens on interaction —
+    //   `#00000066` (rgba(0,0,0,.4)) at rest, `#00000080` (rgba(0,0,0,.5)) on
+    //   hover/press. Replaces the secondary variant's mode-dependent
+    //   `--color-overlay-*` gradients so the feel is identical in both modes.
     color: colorVars['--color-on-dark'],
-    backgroundImage: {
-      default: null,
+    backgroundColor: {
+      default: '#00000066',
       // Press feedback works on every device.
-      ':active': 'linear-gradient(#FFFFFF19, #FFFFFF19)',
+      ':active': '#00000080',
       // Hover feedback only on real pointers, so touch doesn't stick.
       '@media (hover: hover)': {
-        ':hover': 'linear-gradient(#FFFFFF0C, #FFFFFF0C)',
+        ':hover': '#00000080',
       },
     },
+    // Neutralize the secondary variant's mode-dependent hover/press gradient.
+    backgroundImage: 'none',
   },
   disabled: {
     opacity: 0.5,
