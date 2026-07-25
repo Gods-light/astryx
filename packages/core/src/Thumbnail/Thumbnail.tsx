@@ -4,14 +4,14 @@
 
 /**
  * @file Thumbnail.tsx
- * @input Uses React, stylex, Button, Skeleton, Spinner, MediaTheme, useImageMode
+ * @input Uses React, stylex, Button, Skeleton, Spinner
  * @output Exports Thumbnail component, ThumbnailProps
  * @position Core implementation; consumed by index.ts
  *
  * Square preview card for image attachments. Shows a skeleton shimmer while
  * the image loads, the image on success, or a placeholder on failure.
- * Uses useImageMode (APCA) to detect image luminance so the overlaid
- * remove button always has sufficient contrast.
+ * The overlaid remove button uses a fixed translucent-black scrim with a
+ * white (`--color-on-dark`) X so it reads consistently over any image.
  *
  * SYNC: When modified, update these files to stay in sync:
  * - /packages/core/src/Thumbnail/Thumbnail.doc.mjs
@@ -34,16 +34,11 @@ import {Icon} from '../Icon';
 import {Skeleton} from '../Skeleton';
 import {Spinner} from '../Spinner';
 import {Tooltip} from '../Tooltip/Tooltip';
-import {MediaTheme} from '../theme/MediaTheme';
-import {useImageMode} from '../hooks/useImageMode';
 import type {BaseProps} from '../BaseProps';
 import {mergeProps} from '../utils';
 import {themeProps} from '../utils/themeProps';
 import {useTranslator} from '../i18n';
 import {thumbnailScope} from './thumbnail.markers.stylex';
-
-/** Sample the region behind the remove button (20px button, 4px inset, in 64px container). */
-const BUTTON_REGION = {x: 0.5, y: 0.06, width: 0.44, height: 0.44};
 
 /**
  * Neutral hairline drawn over the image so photos with pale edges still read as
@@ -216,6 +211,14 @@ const styles = stylex.create({
     '--_button-radius': `calc(${radiusVars['--radius-element']} - ${spacingVars['--spacing-1']})`,
     height: 20,
     minWidth: 20,
+    // Fixed scrim treatment instead of the secondary variant's theme tokens:
+    // a translucent black backing (`#00000040` = rgba(0,0,0,.25)) with a
+    // `--color-on-dark` (white) X, so the button reads the same over any image
+    // and doesn't shift with the theme's `--color-neutral`. The Icon inherits
+    // this color.
+    // eslint-disable-next-line @astryx/no-hardcoded-styles -- intentional theme-independent scrim; rgba(0,0,0,.25) is fixed by design, not a themeable surface
+    backgroundColor: '#00000040',
+    color: colorVars['--color-on-dark'],
   },
   disabled: {
     opacity: 0.5,
@@ -283,8 +286,9 @@ function ImagePlaceholder() {
  * a placeholder icon on failure / when no src is provided. An overlaid
  * remove button appears when `onRemove` is set.
  *
- * Uses `useImageMode` (APCA) to detect image luminance and `MediaTheme`
- * to ensure the remove button always has sufficient contrast against the image.
+ * The remove button uses a fixed translucent-black scrim with a white
+ * (`--color-on-dark`) X so it stays legible over any image, regardless of
+ * theme.
  *
  * @example
  * ```
@@ -309,7 +313,6 @@ export function Thumbnail({
   ...props
 }: ThumbnailProps) {
   const t = useTranslator();
-  const imageMode = useImageMode(src, {region: BUTTON_REGION, fallback: null});
 
   const hasSrc = src != null;
   const showSkeleton = isLoading && !hasSrc;
@@ -394,11 +397,7 @@ export function Thumbnail({
             <Spinner size="sm" shade="onMedia" />
           </div>
         )}
-        {removeButtonEl != null && imageMode != null ? (
-          <MediaTheme mode={imageMode}>{removeButtonEl}</MediaTheme>
-        ) : (
-          removeButtonEl
-        )}
+        {removeButtonEl}
       </div>
     </div>
   );

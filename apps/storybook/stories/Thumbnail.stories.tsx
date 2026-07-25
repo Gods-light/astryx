@@ -191,9 +191,9 @@ export const Disabled: Story = {
   },
 };
 
-export const MediaModeTest: Story = {
-  name: 'Media Mode (dark vs light images)',
-  render: function MediaModeStory() {
+export const RemoveButtonContrast: Story = {
+  name: 'Remove button (fixed scrim over any image)',
+  render: function RemoveButtonContrastStory() {
     const images = [
       {src: DARK_IMAGE, label: 'dark.jpg', alt: 'Dark image'},
       {src: LIGHT_IMAGE, label: 'light.jpg', alt: 'Light image'},
@@ -204,8 +204,8 @@ export const MediaModeTest: Story = {
     return (
       <div>
         <p style={{fontSize: 12, color: '#888', marginBottom: 8}}>
-          Remove buttons should adapt: light icon on dark images, dark icon on
-          light images.
+          The remove button uses a fixed translucent-black scrim with a white X,
+          so it stays legible over both dark and light images.
         </p>
         <div style={{display: 'flex', gap: 8, alignItems: 'flex-start'}}>
           {items.map(item => (

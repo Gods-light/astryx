@@ -8,12 +8,10 @@ import {Stack} from '@astryxdesign/core/Layout';
 import {Text} from '@astryxdesign/core/Text';
 
 // Demo imagery is inlined as same-origin data URIs so the example is
-// self-contained. Thumbnail's remove-button overlay uses useImageMode, which
-// FETCHES the image to sample pixels (APCA) for contrast — a cross-origin CDN
-// URL without CORS headers cannot be fetched/sampled, so contrast detection
-// fails silently in hosted previews. These scenes are shared verbatim across
-// the Thumbnail examples and span a luminance ramp (night → snow) so the
-// overlay's contrast adaptation is visible.
+// self-contained (no external CDN dependency). These scenes are shared
+// verbatim across the Thumbnail examples and span a luminance ramp
+// (night → snow) so the fixed white-on-scrim remove button is visible
+// against both dark and light images.
 const NIGHT_FOREST =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAwFBMVEX18+H08uDy8d/y8N/v7t/m5NXl49Tk4tPc3NDX1cnW1cnW1cjW1MjV1MjV1MfR0cXIyLzEw7m8vLC3t68wM0QvM0MvM0IvMkIuMkEtMEErLz8iJjkhJTggJTcgJDcfJDYfIzYeIjUcITMbHzIWHiwYGzIXGjEWGjAWGTAVGS8VGC8UGC4UGC0UFy4TFy0TFywTFi0SFiwRFSsQFSkNFR4QFCoPFCkPFCgPEykOEygOEigNEicNEScMESYIDw8ECgr+gzZIAAABqElEQVR42uWQ61aCQBRGD5GylNBMKS9FZgNdNE0cyUvB+79VM8MoF9Fgplau2j/8nO8c9hqAD0ngDwjeJYH1lrfBWoCtYDboNu/Zv7qQYNap1bpCN1gxFh1dNe5WAsCScWqoWttbChAKvHZZ0W6XQoIFpW8ooFmLCG2Rl1BgaZAU5Ac8yg0RlC9nngCRQDFuhQRzinWmkCuYk3lxQoFrlskVqlcTMcEFvYIKoFbNfmEFuIypWaGGkt66tqZuEbjAHZl6SQVF1WqNvpDAHVktXTvR9JbgDZii1+tZI7cYMJXkCASvksB4L5VxHmAsibzgRRIYbjgfCgFDSeBZkh8W1HMIniSBR0mOQPCQA3RgBk4M5DhNZwdEcbKgLXy5iDiZg5gApRYbqTql2FZgMxAKeEWSNUFYx3s2SfU28HPWItrpySSwE2cEdqrYtxgmxgHGScFmHrAGk8SxczIxZnNC1McFOGshShyb4yxB9sI3CXDGnH0MLsD7F5LvvptEgH12Zg1Pn2WuHsjvrwt8308t+nwxT38sgiAE8/RTeagH+vx/F8SeF0Ja8Ak14ia/LgmpZQAAAABJRU5ErkJggg==';
 const MISTY_VALLEY =
