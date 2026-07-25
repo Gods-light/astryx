@@ -150,16 +150,6 @@ const styles = stylex.create({
   },
   interactive: {
     cursor: 'pointer',
-    transitionProperty: 'opacity',
-    transitionDuration: durationVars['--duration-fast'],
-    transitionTimingFunction: easeVars['--ease-standard'],
-    opacity: {
-      default: 1,
-      ':hover': {
-        '@media (hover: hover)': 0.85,
-      },
-      ':active': 0.75,
-    },
     outline: {
       default: null,
       ':has(:focus-visible)': `2px solid ${colorVars['--color-accent']}`,
@@ -167,6 +157,33 @@ const styles = stylex.create({
     outlineOffset: {
       default: '0',
       ':has(:focus-visible)': '2px',
+    },
+    // Hover/active tint overlay, matching ClickableCard. A currentColor tint
+    // painted via ::after so it layers over the image but stays below the
+    // remove button (removeSlot sits at a higher z-index). pointer-events:
+    // none keeps the click target underneath live. imageContainer's
+    // overflow: hidden clips the tint to the rounded corners.
+    '::after': {
+      content: '""',
+      position: 'absolute',
+      inset: 0,
+      pointerEvents: 'none',
+      backgroundColor: 'transparent',
+      transitionProperty: 'background-color',
+      transitionDuration: durationVars['--duration-fast'],
+      transitionTimingFunction: easeVars['--ease-standard'],
+    },
+    ':active::after': {
+      backgroundColor: 'color-mix(in srgb, currentColor 10%, transparent)',
+    },
+  },
+  // Hover tint guarded by @media (hover: hover) so touch devices don't show a
+  // stuck hover state. Composed alongside `interactive` when onClick is set.
+  hoverOverlayOnPointer: {
+    '@media (hover: hover)': {
+      ':hover::after': {
+        backgroundColor: 'color-mix(in srgb, currentColor 5%, transparent)',
+      },
     },
   },
   interactiveButton: {
@@ -349,6 +366,7 @@ export function Thumbnail({
           styles.imageContainer,
           isHoverReveal && thumbnailScope,
           isInteractive && styles.interactive,
+          isInteractive && styles.hoverOverlayOnPointer,
         )}>
         {isInteractive ? (
           <button
