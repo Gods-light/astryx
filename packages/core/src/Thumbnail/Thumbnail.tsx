@@ -97,12 +97,13 @@ export interface ThumbnailProps extends BaseProps<HTMLDivElement> {
   isDisabled?: boolean;
   /**
    * When the remove button is visible.
-   * - `'always'` — the button is always shown (the default).
    * - `'hover'` — the button is revealed on hover, and on keyboard focus so
    *   it stays reachable. On touch devices (no hover) it stays visible.
+   *   This is the default.
+   * - `'always'` — the button is always shown.
    *
    * Only has an effect when `onRemove` is set.
-   * @default 'always'
+   * @default 'hover'
    */
   showRemoveOn?: 'always' | 'hover';
   /**
@@ -299,7 +300,8 @@ function ImagePlaceholder() {
  *
  * Shows a skeleton shimmer while the image loads, the image on success, or
  * a placeholder icon on failure / when no src is provided. An overlaid
- * remove button appears when `onRemove` is set.
+ * remove button appears when `onRemove` is set — revealed on hover or
+ * keyboard focus by default (`showRemoveOn`), or always shown.
  *
  * The remove button uses a fixed translucent-black scrim with a white
  * (`--color-on-dark`) X so it stays legible over any image, regardless of
@@ -309,6 +311,7 @@ function ImagePlaceholder() {
  * ```
  * <Thumbnail src="/photo.jpg" alt="Vacation photo" onRemove={() => {}} />
  * <Thumbnail src="/preview.png" alt="Preview" onClick={() => {}} label="preview.png" />
+ * <Thumbnail src="/logo.png" alt="Logo" onRemove={() => {}} showRemoveOn="always" />
  * ```
  */
 export function Thumbnail({
@@ -319,7 +322,7 @@ export function Thumbnail({
   onClick,
   isLoading = false,
   isDisabled = false,
-  showRemoveOn = 'always',
+  showRemoveOn = 'hover',
   xstyle,
   className,
   style,

@@ -167,11 +167,11 @@ describe('Thumbnail', () => {
       expect(hover.className).not.toBe(always.className);
     });
 
-    it('defaults to "always" (same slot class as an explicit always)', () => {
+    it('defaults to "hover" (same slot class as an explicit hover)', () => {
       const def = removeSlotClass(undefined);
       def.unmount();
-      const always = removeSlotClass('always');
-      expect(def.className).toBe(always.className);
+      const hover = removeSlotClass('hover');
+      expect(def.className).toBe(hover.className);
     });
 
     it('still fires onRemove when revealed on hover', async () => {

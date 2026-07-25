@@ -72,6 +72,7 @@ export const WithRemove: Story = {
         src={LIGHT_IMAGE}
         alt="Removable thumbnail"
         label="photo.png"
+        showRemoveOn="always"
         onRemove={() => setVisible(false)}
       />
     );
@@ -133,6 +134,7 @@ export const WithCaption: Story = {
         src={WARM_IMAGE}
         alt="Photo with metadata"
         label="screenshot.png"
+        showRemoveOn="always"
         onRemove={() => setVisible(false)}
       />
     );
@@ -177,7 +179,13 @@ export const Placeholder: Story = {
         </p>
       );
     }
-    return <Thumbnail label="report.pdf" onRemove={() => setVisible(false)} />;
+    return (
+      <Thumbnail
+        label="report.pdf"
+        showRemoveOn="always"
+        onRemove={() => setVisible(false)}
+      />
+    );
   },
 };
 
@@ -214,6 +222,7 @@ export const RemoveButtonContrast: Story = {
               src={item.src}
               alt={item.alt}
               label={item.label}
+              showRemoveOn="always"
               onRemove={() =>
                 setItems(prev => prev.filter(i => i.label !== item.label))
               }
@@ -247,6 +256,7 @@ export const Gallery: Story = {
             src={item.src}
             alt={item.label}
             label={item.label}
+            showRemoveOn="always"
             onRemove={() =>
               setItems(prev => prev.filter(i => i.id !== item.id))
             }
