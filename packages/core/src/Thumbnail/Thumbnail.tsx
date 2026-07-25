@@ -22,7 +22,6 @@
  */
 
 import * as stylex from '@stylexjs/stylex';
-import type {StyleXStyles} from '@stylexjs/stylex';
 import {
   colorVars,
   radiusVars,
@@ -213,26 +212,14 @@ const styles = stylex.create({
     '--_button-radius': `calc(${radiusVars['--radius-element']} - ${spacingVars['--spacing-1']})`,
     height: 20,
     minWidth: 20,
-    // Fixed scrim treatment instead of the secondary variant's theme tokens.
-    // The button always sits over an image, so its color mode is irrelevant:
-    // every state is pinned to the same values in both light and dark mode.
-    // - X icon: `--color-on-dark` (white, same in both modes; Icon inherits it)
-    // - backing: a translucent-black scrim that darkens on interaction —
-    //   `#00000066` (rgba(0,0,0,.4)) at rest, `#00000080` (rgba(0,0,0,.5)) on
-    //   hover/press. Replaces the secondary variant's mode-dependent
-    //   `--color-overlay-*` gradients so the feel is identical in both modes.
+    // The button floats over an image, so pin only what must be fixed:
+    // a translucent-black backing (`#00000066` = rgba(0,0,0,.4)) and a white
+    // (`--color-on-dark`) X, identical in light and dark mode. Everything else
+    // — including the hover/press overlay (`--color-overlay-*`) — is left to
+    // the secondary Button variant's defaults.
+    // eslint-disable-next-line @astryx/no-hardcoded-styles -- intentional theme- and mode-independent scrim over media; fixed by design, not a themeable surface
+    backgroundColor: '#00000066',
     color: colorVars['--color-on-dark'],
-    backgroundColor: {
-      default: '#00000066',
-      // Press feedback works on every device.
-      ':active': '#00000080',
-      // Hover feedback only on real pointers, so touch doesn't stick.
-      '@media (hover: hover)': {
-        ':hover': '#00000080',
-      },
-    },
-    // Neutralize the secondary variant's mode-dependent hover/press gradient.
-    backgroundImage: 'none',
   },
   disabled: {
     opacity: 0.5,
@@ -371,7 +358,7 @@ export function Thumbnail({
           e.stopPropagation();
           onRemove(e);
         }}
-        xstyle={styles.removeButtonOverrides as unknown as StyleXStyles}
+        xstyle={styles.removeButtonOverrides}
       />
     </div>
   ) : null;
