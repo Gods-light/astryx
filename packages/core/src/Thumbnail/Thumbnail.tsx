@@ -45,6 +45,15 @@ import {thumbnailScope} from './thumbnail.markers.stylex';
 /** Sample the region behind the remove button (20px button, 4px inset, in 64px container). */
 const BUTTON_REGION = {x: 0.5, y: 0.06, width: 0.44, height: 0.44};
 
+/**
+ * Neutral hairline drawn over the image so photos with pale edges still read as
+ * a defined tile. Intentionally theme-agnostic (a black/white scrim edge rather
+ * than the theme-tinted `--color-border`): a translucent black in light mode,
+ * a translucent white in dark mode. `#00000010` = rgba(0,0,0,.0625),
+ * `#FFFFFF40` = rgba(255,255,255,.25).
+ */
+const INSET_BORDER_COLOR = 'light-dark(#00000010, #FFFFFF40)';
+
 export interface ThumbnailProps extends BaseProps<HTMLDivElement> {
   /** Ref forwarded to the root element */
   ref?: React.Ref<HTMLDivElement>;
@@ -137,7 +146,7 @@ const styles = stylex.create({
     position: 'absolute',
     inset: 0,
     borderRadius: 'inherit',
-    boxShadow: `inset 0 0 0 1px ${colorVars['--color-border']}`,
+    boxShadow: `inset 0 0 0 1px ${INSET_BORDER_COLOR}`,
     pointerEvents: 'none',
   },
   placeholder: {
