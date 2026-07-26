@@ -320,6 +320,17 @@ duplicate Claude Design project** instead of updating the existing one.
 
 If you skip this you get a duplicate project and a full re-verification of all 98 components.
 
+## conventions.md validation log
+
+- **2026-07-26 (re-sync):** every component, token and prop named in `conventions.md`
+  re-verified against a fresh build — 12/12 tokens, 10/10 props, 21/21 components, plus the
+  4 bundle-only exports (`LayerProvider`, `useLinkComponent`, `LinkProvider`, `useTheme`).
+  **One claim failed:** it said "Every component takes an `xstyle` prop" — actually **93 of
+  98**. `Icon`, `Theme`, `MediaTheme`, `Toast`, `Tooltip` have none (confirmed in source, not
+  just a d.ts extraction gap). Corrected, since the README is inlined into the design agent's
+  prompt and the agent would have written `<Icon xstyle={…}>`. **Re-check this ratio whenever
+  components are added:** `grep -l xstyle ds-bundle/components/core/*/*.d.ts | wc -l`.
+
 ## Re-sync risks (rewritten 2026-07-26 — supersedes the 2026-07-20 list)
 
 **Read this first; these are the things that silently go stale.**

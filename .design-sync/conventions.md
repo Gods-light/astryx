@@ -28,9 +28,14 @@ you dropped the wrapper.
 
 ## Styling idiom — `xstyle`, never inline styles
 
-Every component takes an **`xstyle`** prop. It accepts **StyleX styles from
+Almost every component takes an **`xstyle`** prop (93 of 98). It accepts **StyleX styles from
 `stylex.create()`** — not inline objects, not class strings. For your own layout glue around
 components, plain `className` (Tailwind or your own CSS) is fine.
+
+The 5 without `xstyle`, and what to use instead: **`Icon`** (style via its own `size`/`color`
+props), **`Theme`** and **`MediaTheme`** (providers — they wrap, they don't paint),
+**`Toast`** (fired imperatively via `useToast()`), **`Tooltip`** (wraps a trigger; style the
+trigger). Check the component's `.d.ts` before reaching for `xstyle`.
 
 ```jsx
 const s = stylex.create({
